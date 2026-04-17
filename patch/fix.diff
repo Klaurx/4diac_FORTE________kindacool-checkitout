@@ -1,0 +1,21 @@
+--- a/core/src/gatherdataconn.cpp
++++ b/core/src/gatherdataconn.cpp
+@@ -29,10 +29,15 @@ namespace forte::internal {
+   EMGMResponse CGatheringDataConnection::disconnect(CFunctionBlock &paDstFB,
+                                                      std::span<const StringId> paDstPortNameId) {
+     for (const auto [member, connection, memberName] : mGatheringData) {
+       connection->disconnect(paDstFB, memberName);
+       if (connection->isDelegating()) {
+         delete connection;
+       }
+     }
+     mGatheringData.clear();
++
++    // Restore invariant: all delegating connections must leave no dangling
++    // references in FB interface slots after disconnect() returns.
++    const TPortId dstPortId =
++        paDstFB.getFBInterfaceSpec().getDIID(paDstPortNameId.front());
++    paDstFB.connectDI(dstPortId, nullptr);
++
+     return EMGMResponse::Ready;
+   }
