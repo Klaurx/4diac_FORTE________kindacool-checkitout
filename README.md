@@ -34,3 +34,8 @@ poc/concept.md      trigger sequence and expected behavior
 patch/fix.diff      proposed fix
 repro/README.md     ASAN build and reproduction steps
 ```
+Authors:
+
+Klaurx the divine
+
+Also a huge shoutout to "Slowdive — ballad of the dead" for all the help he had.
